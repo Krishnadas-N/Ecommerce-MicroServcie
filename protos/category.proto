@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+message Category {
+    string id = 1;
+    string categoryName = 2;
+    bool isActive = 3;
+    string status = 4;
+}
+
+service CategoryService {
+    rpc GetCategory(GetCategoryRequest) returns (GetCategoryResponse) {}
+}
+
+message GetCategoryRequest {}
+
+message GetCategoryResponse {
+    repeated Category categories = 1;
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service WishlistService {
+    rpc GetUserWishlist(UserWishlistRequest) returns (UserWishlistResponse) {}
+}
+
+message UserWishlistRequest {
+    string userId = 1;
+}
+
+message UserWishlistResponse {
+    repeated string productIds = 1;
+}

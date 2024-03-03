@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+service ProductService {
+  rpc CheckProductExistence (CheckProductExistenceRequest) returns (CheckProductExistenceResponse);
+  rpc GetProductDetailsById(ProductDetailsRequest) returns (ProductDetailsResponse);
+}
+
+message CheckProductExistenceRequest {
+  string product_id = 1;  
+};
+
+message CheckProductExistenceResponse {
+  bool exists = 1;
+}
+
+message ProductDetailsRequest {
+  string product_id = 1; 
+}
+
+message ProductDetailsResponse {
+  string id = 1; 
+  string name = 2;
+  string description = 3;
+  repeated string images = 4;
+  string brand = 5;
+  int32 stock_count  = 6; 
+  bool is_featured  = 7; 
+  repeated string sizes = 8;
+  double price = 9;
+}

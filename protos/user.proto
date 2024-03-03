@@ -1,0 +1,13 @@
+syntax="proto3";
+
+service UserService{
+    rpc CheckUserBlocked (CheckUserBlockedRequest) returns (CheckUserBlockedResponse){}
+}   
+
+message CheckUserBlockedRequest {
+    string user_id = 1;
+}
+
+message CheckUserBlockedResponse {
+    bool is_blocked = 1;
+}
