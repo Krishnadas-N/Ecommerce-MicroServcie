@@ -1,9 +1,11 @@
-const grpc = require('grpc');
+const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
-const User = require("../Models/userSchema"); 
-const userProtoPath = '../../protos/user-proto';
+const User = require("../Models/userSchema");
+const path = require('path');
+
+const userProtoPath = path.join(__dirname, '../../protos/user.proto');
 const userPackageDefinition = protoLoader.loadSync(userProtoPath);
-const userServiceProto = grpc.loadPackageDefinition(userPackageDefinition).UserService
+const userServiceProto = grpc.loadPackageDefinition(userPackageDefinition)
 const AddressModel = require('../Models/addressModel')
 
 const checkUserBlocked = async(call, callback) => {
@@ -33,12 +35,23 @@ const getUsersAddress = async(call, callback) => {
     }
 };
 
-const server = new grpc.Server();
-server.addService(userServiceProto.UserService.service, {
+const grpcServer = new grpc.Server();
+grpcServer.addService(userServiceProto.UserService.service, {
     CheckUserBlocked: checkUserBlocked,
     GetUserAddress:getUsersAddress
 });
 
-server.bind('0.0.0.0:50051', grpc.ServerCredentials.createInsecure());
-console.log('Server running at http://0.0.0.0:50051');
-server.start();;
+grpcServer.bindAsync(
+    "0.0.0.0:50051",
+    grpc.ServerCredentials.createInsecure(),
+    (err, port) => {
+        if (err) {
+            console.error("Error binding server:", err);
+            return;
+        }
+        console.log(`User gRPC server started on port ${port}`);
+        grpcServer.start();
+    }
+);
+
+module.exports = grpcServer

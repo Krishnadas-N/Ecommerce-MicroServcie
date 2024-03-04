@@ -48,7 +48,7 @@ server.on('error', onError);
 
 server.on('listening', onListening);
 
-const port = normalizePort(process.env.PORT || '5001');
+const port = normalizePort(process.env.PORT || '5006');
 app.set('port', port);
 
 server.listen(port);

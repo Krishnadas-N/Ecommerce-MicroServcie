@@ -9,6 +9,8 @@ const db = require('./Config/database')
 const usersRouter = require('./routes/userRoutes');
 
 const errorHandler = require('./middlewares/errorHandler');
+const grpcServer = require('./grpcServices/checkUserisBlocked');
+
 
 require('dotenv').config();
 
@@ -47,7 +49,7 @@ server.on('error', onError);
 
 server.on('listening', onListening);
 
-const port = normalizePort(process.env.PORT || '5000');
+const port = normalizePort(process.env.PORT || '5001');
 app.set('port', port);
 
 server.listen(port);
