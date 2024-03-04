@@ -2,10 +2,36 @@ syntax="proto3";
 
 service UserService{
     rpc CheckUserBlocked (CheckUserBlockedRequest) returns (CheckUserBlockedResponse){}
+    rpc GetUserAddress (UserRequest) returns (AdressResponse) {}
 }   
+
+
+message Address {
+    string addressType = 1;
+    string houseNo = 2;
+    string street = 3;
+    string landmark = 4;
+    int32 pincode = 5;
+    string city = 6;
+    string district = 7;
+    string state = 8;
+    string country = 9;
+}
+
+message GetUsersAddressResponse {
+    repeated Address addresses = 1;
+}
 
 message CheckUserBlockedRequest {
     string user_id = 1;
+}
+
+message UserRequest {
+    string user_id = 1;
+}
+
+message AdressResponse {
+
 }
 
 message CheckUserBlockedResponse {

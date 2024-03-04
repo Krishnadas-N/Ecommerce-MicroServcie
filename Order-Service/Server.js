@@ -5,10 +5,11 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
-const db = require('./Config/database')
-const cartRoute = require('./routes/cartRoute');
+const db = require('./Config/database');
+const orderRoute = require('./routes/orderRoute');
 
 const errorHandler = require('./middlewares/errorHandler');
+const { consumeOrders } = require('./utils/ampqSetup');
 
 require('dotenv').config();
 
@@ -35,8 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use('/cart', cartRoute);
-
+app.use('/order', orderRoute);
 
 app.use((req, res, next) => {
   next(createError(404));
@@ -46,7 +46,14 @@ app.use(errorHandler);
 
 server.on('error', onError);
 
-server.on('listening', onListening);
+server.on('listening', () => {
+  console.log('Server listening on port', server.address().port);
+  // Call consumeOrders function here
+  consumeOrders().catch(error => {
+    console.error('Failed to start order service:', error);
+    process.exit(1); // Exit the process if there's an error
+  });
+});
 
 const port = normalizePort(process.env.PORT || '5001');
 app.set('port', port);
@@ -83,11 +90,4 @@ function onError(error) {
     default:
       throw error;
   }
-}
-
-// Function to handle HTTP server "listening" event
-function onListening() {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  console.log('Listening on ' + bind);
 }

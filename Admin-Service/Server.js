@@ -6,7 +6,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const session = require('express-session');
 const db = require('./Config/database')
-const cartRoute = require('./routes/cartRoute');
+const admin_router = require('./routes/adminRoutes');
 
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -35,8 +35,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
-app.use('/cart', cartRoute);
-
+app.use('/admin', admin_router);
 
 app.use((req, res, next) => {
   next(createError(404));
@@ -48,7 +47,7 @@ server.on('error', onError);
 
 server.on('listening', onListening);
 
-const port = normalizePort(process.env.PORT || '5001');
+const port = normalizePort(process.env.PORT || '5000');
 app.set('port', port);
 
 server.listen(port);

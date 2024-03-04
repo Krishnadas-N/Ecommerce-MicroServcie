@@ -7,6 +7,20 @@ const instance = new Razorpay({
 })
 
 
-module.exports = instance;
+const createRazorpayOrder = async (options) => {
+    return new Promise((resolve, reject) => {
+        instance.orders.create(options, (err, order) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(order);
+            }
+        });
+    });
+};
+
+module.exports = {
+    createRazorpayOrder
+};
 
 // API signature
